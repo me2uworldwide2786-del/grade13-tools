@@ -1,6 +1,11 @@
 "use client";
 
-import BackgroundPaths from "./background-paths";
+import dynamic from "next/dynamic";
+
+const BackgroundPaths = dynamic(() => import("./background-paths"), {
+  ssr: false,
+  loading: () => null,
+});
 
 /* ─────────────────────────────────────────────────────────────────
    HeroBackground — fixed full-page animated background
