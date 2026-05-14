@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -34,75 +33,20 @@ export default function Hero() {
           gap: "1.25rem",
         }}
       >
-        {/* SA badge — animated border comet */}
+        {/* SA badge — gold radial pulse */}
         <div
           style={{
-            position: "relative",
             display: "inline-flex",
             alignItems: "center",
-            /* Subtle gold border — the white comet provides the visual interest */
-            border: "1px solid rgba(245,166,35,0.2)",
+            border: "1px solid rgba(245,166,35,0.45)",
             borderRadius: "9999px",
             padding: "0.35rem 1rem",
             backgroundColor: "rgba(245,166,35,0.07)",
+            animation: "goldPulse 2.5s ease-out infinite",
           }}
         >
-          {/*
-           * Mask wrapper — restricts the comet's visibility to the 1px border
-           * region only, so the glow travels on the border rather than flooding
-           * the interior.
-           *
-           * Technique: mask-composite exclude (XOR) of two opaque layers clipped
-           * to padding-box and border-box respectively cancels out in the
-           * padding area (both opaque → XOR = 0) and passes through in the
-           * border area (only border-box layer present → XOR = 1).
-           *
-           * The mask wrapper needs its own border so border-box ≠ padding-box.
-           */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: "9999px",
-              /* 1px border defines the mask's border region */
-              border: "1px solid transparent",
-              /* XOR mask: visible only where border-box ∖ padding-box */
-              maskImage:
-                "linear-gradient(#000,#000), linear-gradient(#000,#000)",
-              maskClip: "padding-box, border-box",
-              maskComposite: "exclude",
-              WebkitMaskImage:
-                "linear-gradient(#000,#000), linear-gradient(#000,#000)",
-              WebkitMaskClip: "padding-box, border-box",
-              WebkitMaskComposite: "xor",
-            } as React.CSSProperties}
-          >
-            {/* The comet — travels along the badge border using CSS offset-path */}
-            <motion.div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                width: "20px",
-                height: "20px",
-                /* White gradient oriented in the direction of travel */
-                background:
-                  "linear-gradient(to right, transparent, rgba(255,255,255,0.8), white)",
-                borderRadius: "9999px",
-                /* Traces the containing block's border outline */
-                offsetPath: "rect(0 auto auto 0 round 9999px)",
-                /* Rotate element to face direction of travel */
-                offsetRotate: "auto",
-              } as React.CSSProperties}
-              animate={{ offsetDistance: ["0%", "100%"] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-
-          {/* Badge label — above the comet layer */}
           <span
             style={{
-              position: "relative",
-              zIndex: 1,
               fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: "0.8125rem",
               fontWeight: 600,
@@ -256,8 +200,16 @@ export default function Hero() {
       </div>
 
       <style>{`
+        @keyframes goldPulse {
+          0%   { box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.5); }
+          70%  { box-shadow: 0 0 0 12px rgba(245, 166, 35, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(245, 166, 35, 0); }
+        }
         @media (max-width: 480px) {
           .hero-stats-divider { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="goldPulse"] { animation: none !important; }
         }
       `}</style>
     </section>
